@@ -1,5 +1,5 @@
 from main import Game, Deck, Card
-from pytest import raises
+from pytest import raises, mark
 
 # pytest
 
@@ -9,8 +9,8 @@ class FakeCard:
     def __init__(self, value):
         self.value = value
 
+@mark.unit
 def test_wrong_guess_loses_points():
-    # Unit test
     # Start a new game
     game = Game()
     game.start()
@@ -23,7 +23,7 @@ def test_wrong_guess_loses_points():
         "FakeCard",  # class name
         (),          # bases – here: none
         {"value": 10}  # attributes/methods
-    )
+    )() #() na końcu powoduje utworzenie instancji klasy - bo inazcej przekazuję klasę a nie obiekt
     game.deck.hand_cards.append(type("FakeCard", (), {"value": 5})())  # player will make a mistake because 5 < 10, but chooses 'h'
     
     # Simulate the player's choice – assumes next card will be higher
@@ -32,8 +32,8 @@ def test_wrong_guess_loses_points():
     assert result is False  # because 5 < 10, so the player was wrong
     assert game.score == 35
 
+@mark.unit
 def test_right_guess_added_points():
-    # Unit test
     game = Game()
     game.start()
 
@@ -46,8 +46,8 @@ def test_right_guess_added_points():
     assert result is True
     assert game.score == 70
 
+@mark.unit
 def test_no_cards_left_returns_none():
-    # Unit test
     game = Game()
     game.start()
 
@@ -60,8 +60,8 @@ def test_no_cards_left_returns_none():
     assert score_change is None
     assert result is False
 
+@mark.unit
 def test_check_score():
-    # Unit test
     # Test: check if check_score() works correctly
     game = Game()
     game.start()
@@ -70,8 +70,8 @@ def test_check_score():
     game.score = 60
     assert game.check_score() == 60
 
+@mark.unit
 def test_reset_score():
-    # Unit test
     game = Game()
     game.start()
 
@@ -82,8 +82,8 @@ def test_reset_score():
     game.reset_score()
     assert game.check_score() == 50 
 
+@mark.unit
 def test_has_more_cards_on_hand():
-    # Unit test
     # Test: check if has_more_cards_on_hand() works properly
     game = Game()
     game.start()
@@ -93,6 +93,7 @@ def test_has_more_cards_on_hand():
     game.deck.hand_cards = []
     assert game.has_more_cards_on_hand() == False
 
+@mark.integration
 def test_hand_cards_after_start():
     # Integration test
     # Test: number of cards in hand after starting the game
@@ -104,8 +105,8 @@ def test_hand_cards_after_start():
     assert game.deck.hand_size == game.NCARDS - 1
     assert isinstance(game.active_card, Card)
 
+@mark.unit
 def test_grab_hand_takes_cards_from_deck():
-    # Unit test
     # Test: grab_hand actually removes cards from deck
     deck = Deck()
     original_deck_size = len(deck.cards)
@@ -115,16 +116,16 @@ def test_grab_hand_takes_cards_from_deck():
     assert len(hand) == 8
     assert len(deck.cards) == original_deck_size - 8
 
+@mark.unit
 def test_get_card_returns_none_if_empty():
-    # Unit test
     # Test: get_card() returns None if no cards left
     deck = Deck()
     deck.hand_cards = []
 
     assert deck.get_card() == None
 
+@mark.unit
 def test_play_turn_wrong_letter():
-    # Unit test
     # Test: check that method handles invalid input like 'x'
     game = Game()
     
@@ -133,6 +134,7 @@ def test_play_turn_wrong_letter():
     
     assert "Invalid answer" in str(excinfo.value)
 
+@mark.integration
 def test_shuffle_preserves_cards_but_changes_order():
     # Integration test
     deck = Deck()

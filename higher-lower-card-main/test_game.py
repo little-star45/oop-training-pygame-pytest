@@ -148,3 +148,17 @@ def test_shuffle_preserves_cards_but_changes_order():
 
     # Different order (most likely)
     assert original != shuffled
+
+@mark.unit
+def test_card_creation():
+    "check if card has proper attributes"
+    card = Card("King", "Hearts", 13)
+
+    assert card.rank == "King"
+    assert card.suit == "Hearts"
+    assert card.value == 13
+
+@mark.unit
+def test_deck_has_52_cards():
+    deck = Deck()
+    assert len(deck.cards) == 52

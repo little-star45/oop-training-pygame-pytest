@@ -68,6 +68,9 @@ class Game:
         return self.score
     
     def play_turn(self, answer):
+        if answer not in ('h', 'l'):
+            raise ValueError("Invalid answer, must be 'h' or 'l'")
+
         next_card = self.deck.get_card()
         if next_card is None:
             return None, None, False 

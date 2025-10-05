@@ -160,5 +160,6 @@ def test_card_creation():
 
 @mark.unit
 def test_deck_has_52_cards():
+    "check if start deck has always 52 cards"
     deck = Deck()
     assert len(deck.cards) == 52
